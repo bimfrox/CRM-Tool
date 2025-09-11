@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "https://bimfrox-crm.onrender.com";
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");

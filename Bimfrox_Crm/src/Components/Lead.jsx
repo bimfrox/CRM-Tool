@@ -20,7 +20,7 @@ export default function Lead() {
   });
   const [updatingId, setUpdatingId] = useState(null);
 
-  const API_URL = "http://localhost:5000/api/leads";
+  const API_URL = "https://bimfrox-crm.onrender.com/api/leads";
 
   useEffect(() => {
     fetchLeads();

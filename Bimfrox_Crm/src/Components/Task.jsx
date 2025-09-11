@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { format } from "date-fns";
 
-const TASK_API = "http://localhost:5000/api/tasks";
-const TEAM_API = "http://localhost:5000/api/teammember";
+const TASK_API = "https://bimfrox-crm.onrender.com/api/tasks";
+const TEAM_API = "https://bimfrox-crm.onrender.com/api/teammember";
 
 export default function Task() {
   const [tasks, setTasks] = useState([]);

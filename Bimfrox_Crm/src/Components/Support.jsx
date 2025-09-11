@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/support";
+const API_URL = "https://bimfrox-crm.onrender.com/api/support";
 
 const Support = () => {
   const [tickets, setTickets] = useState([]);

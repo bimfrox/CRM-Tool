@@ -40,7 +40,7 @@ export default function Reminder() {
 
   // Load reminders from backend
   useEffect(() => {
-    axios.get("http://localhost:5000/api/reminders").then((res) => {
+    axios.get("https://bimfrox-crm.onrender.com/api/reminders").then((res) => {
       // Ensure dates are parsed as JS Date objects
       const events = res.data.map((r) => ({
         ...r,
@@ -67,7 +67,7 @@ export default function Reminder() {
       priority: formData.priority,
     };
 
-    const res = await axios.post("http://localhost:5000/api/reminders", newReminder);
+    const res = await axios.post("https://bimfrox-crm.onrender.com/api/reminders", newReminder);
     setReminders([
       ...reminders,
       { ...res.data, start: new Date(res.data.start), end: new Date(res.data.end) },
@@ -76,14 +76,14 @@ export default function Reminder() {
   };
 
   const deleteReminder = async (id) => {
-    await axios.delete(`http://localhost:5000/api/reminders/${id}`);
+    await axios.delete(`https://bimfrox-crm.onrender.com/api/reminders/${id}`);
     setReminders(reminders.filter((r) => r._id !== id));
   };
 
   // Handle drag & drop reschedule
   const moveReminder = async ({ event, start, end }) => {
     const updated = { ...event, start, end };
-    await axios.put(`http://localhost:5000/api/reminders/${event._id}`, updated);
+    await axios.put(`https://bimfrox-crm.onrender.com/api/reminders/${event._id}`, updated);
     setReminders(
       reminders.map((r) =>
         r._id === event._id ? { ...updated, start: new Date(start), end: new Date(end) } : r

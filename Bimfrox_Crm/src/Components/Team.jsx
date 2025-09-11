@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/teammember";
+const API_URL = "https://bimfrox-crm.onrender.com/api/teammember";
 
 const Team = () => {
   const [team, setTeam] = useState([]);

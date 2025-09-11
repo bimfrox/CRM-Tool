@@ -10,7 +10,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 
-const API_URL = "http://localhost:5000/api/clients"; // ✅ Local API
+const API_URL = "https://bimfrox-crm.onrender.com/api/clients"; // ✅ Local API
 
 const Client = () => {
   const [clients, setClients] = useState([]);

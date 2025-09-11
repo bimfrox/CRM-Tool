@@ -19,6 +19,7 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://crm-bimfrox.onrender.com",
   process.env.FRONTEND_URL, // deployed frontend (set in .env)
 ];
 

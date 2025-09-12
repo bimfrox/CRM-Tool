@@ -3,41 +3,38 @@ import Reminder from "../models/Reminder.js";
 
 const router = express.Router();
 
-// Get all reminders
+// ✅ Get all reminders (with filters)
 router.get("/", async (req, res) => {
-  const reminders = await Reminder.find();
+  const { priority, from, to, category } = req.query;
+  const filter = { isArchived: false };
+
+  if (priority) filter.priority = priority;
+  if (category) filter.category = category;
+  if (from && to) {
+    filter.start = { $gte: new Date(from), $lte: new Date(to) };
+  }
+
+  const reminders = await Reminder.find(filter).sort({ start: 1 });
   res.json(reminders);
 });
 
-// Add new reminder
+// ✅ Create reminder
 router.post("/", async (req, res) => {
-  try {
-    const reminder = new Reminder(req.body);
-    await reminder.save();
-    res.json(reminder);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+  const reminder = new Reminder(req.body);
+  await reminder.save();
+  res.json(reminder);
 });
 
-// Update reminder (reschedule, edit)
+// ✅ Update reminder
 router.put("/:id", async (req, res) => {
-  try {
-    const reminder = await Reminder.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(reminder);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+  const reminder = await Reminder.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.json(reminder);
 });
 
-// Delete reminder
+// ✅ Soft delete (archive)
 router.delete("/:id", async (req, res) => {
-  await Reminder.findByIdAndDelete(req.params.id);
-  res.json({ message: "Reminder deleted" });
+  const reminder = await Reminder.findByIdAndUpdate(req.params.id, { isArchived: true }, { new: true });
+  res.json(reminder);
 });
 
 export default router;

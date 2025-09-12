@@ -3,41 +3,31 @@ import Project from "../models/Project.js";
 
 const router = express.Router();
 
-// GET all projects
+// Create
+router.post("/", async (req, res) => {
+  try {
+    const project = new Project(req.body);
+    await project.save();
+    res.status(201).json(project);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get All
 router.get("/", async (req, res) => {
   try {
-    const projects = await Project.find().populate("projectManager", "name").populate("teamMembers", "name role");
+    const projects = await Project.find()
+      .populate("projectManager", "name role")
+      .populate("teamMembers", "name role");
     res.json(projects);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// POST create project
-router.post("/", async (req, res) => {
-  try {
-    const project = await Project.create(req.body);
-    const populatedProject = await project.populate("projectManager", "name").populate("teamMembers", "name role");
-    res.status(201).json(populatedProject);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// PUT update project
-router.put("/:id",async (req, res) => {
-  try {
-    const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true })
-      .populate("projectManager", "name")
-      .populate("teamMembers", "name role");
-    res.json(project);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// DELETE project
-router.delete("/:id",async (req, res) => {
+// Delete
+router.delete("/:id", async (req, res) => {
   try {
     await Project.findByIdAndDelete(req.params.id);
     res.json({ message: "Project deleted" });
@@ -45,5 +35,22 @@ router.delete("/:id",async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Update Status
+router.put("/:id/status", async (req, res) => {
+  try {
+    const { status } = req.body;
+    const project = await Project.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    if (!project) return res.status(404).json({ error: "Project not found" });
+    res.json(project);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 export default router;

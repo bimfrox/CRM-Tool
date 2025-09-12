@@ -1,11 +1,18 @@
 import mongoose from "mongoose";
 
-const reminderSchema = new mongoose.Schema({
+const ReminderSchema = new mongoose.Schema({
   title: { type: String, required: true },
   start: { type: Date, required: true },
   end: { type: Date, required: true },
-  priority: { type: String, default: "Normal" },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // if multi-user
+  priority: { type: String, enum: ["Low", "Normal", "High"], default: "Normal" },
+  category: { type: String, default: "General" },
+  recurring: {
+    type: String,
+    enum: ["none", "daily", "weekly", "monthly"],
+    default: "none",
+  },
+  isArchived: { type: Boolean, default: false },
+  email: { type: String, default: "user-email@example.com" } // add email per user
 });
 
-export default mongoose.model("Reminder", reminderSchema);
+export default mongoose.model("Reminder", ReminderSchema);

@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import cron from "node-cron";
+import nodemailer from "nodemailer";
 
 import leadRoutes from "./routes/leadRoutes.js";
 import authRoutes from "./routes/auth.js";
@@ -11,6 +13,8 @@ import supportRoutes from "./routes/supportRoutes.js";
 import reminderRoutes from "./routes/reminderRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
+
+import Reminder from "./models/Reminder.js"; // ✅ import reminder model
 
 dotenv.config();
 
@@ -60,7 +64,6 @@ app.use("/api/reminders", reminderRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/projects", projectRoutes);
 
-
 // Default route
 app.get("/", (req, res) => res.send("🚀 CRM Backend Running"));
 
@@ -68,6 +71,43 @@ app.get("/", (req, res) => res.send("🚀 CRM Backend Running"));
 app.use((err, req, res, next) => {
   console.error("❌ Server Error:", err);
   res.status(500).json({ error: err.message || "Internal Server Error" });
+});
+
+// ✅ Nodemailer setup
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "bimfroxservice@gmail.com", // your email
+    pass: "ndkekaqfespuijxt", // app password
+  },
+});
+
+// ✅ Cron job: check every minute for reminders due in 15 min
+cron.schedule("* * * * *", async () => {
+  const now = new Date();
+  const fifteenMinLater = new Date(now.getTime() + 15 * 60 * 1000);
+
+  const reminders = await Reminder.find({
+    start: { $gte: now, $lte: fifteenMinLater },
+    isArchived: false,
+  });
+
+  for (let r of reminders) {
+    console.log(`🔔 Reminder alert: ${r.title} at ${r.start}`);
+
+    if (r.email) {
+      try {
+        await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: r.email,
+          subject: "⏰ Reminder Alert",
+          text: `Your reminder "${r.title}" is scheduled at ${r.start.toLocaleString()}.`,
+        });
+      } catch (err) {
+        console.error("❌ Email send error:", err.message);
+      }
+    }
+  }
 });
 
 // Start Server

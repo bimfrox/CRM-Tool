@@ -12,8 +12,8 @@ const projectSchema = new mongoose.Schema(
       enum: ["Planning", "In Progress", "On Hold", "Completed"],
       default: "Planning",
     },
-    projectManager: { type: mongoose.Schema.Types.ObjectId, ref: "TeamMember" },
-    teamMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: "TeamMember" }],
+    projectManager: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
+    teamMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
   },
   { timestamps: true }
 );

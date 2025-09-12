@@ -4,7 +4,7 @@ import Select from "react-select"; // for multi-select team members
 import { FaTrashAlt, FaPlus, FaSearch } from "react-icons/fa";
 
 const API_URL = "https://bimfrox-crm.onrender.com/api/projects";
-const TEAM_API = "https://bimfrox-crm.onrender.com/teammember";
+const TEAM_API = "https://bimfrox-crm.onrender.com/api/teammember";
 
 const statusColors = {
   Planning: "bg-gray-400",

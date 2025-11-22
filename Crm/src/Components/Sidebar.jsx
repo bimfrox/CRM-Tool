@@ -19,7 +19,7 @@ export default function Sidebar({ activeSection, onSectionChange, userRole }) {
   return (
     <div className="w-64 bg-white border-r border-gray-200 h-full flex flex-col shadow-md">
       <div className="p-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-blue-600">BimFrox CRM</h1>
+        <h1 className="text-xl font-bold text-blue-600">CRM</h1>
         <p className="text-sm text-gray-500 mt-1">Complete CRM Solution</p>
       </div>
 
